@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>高德规划折线区域</title>
+    <title>高德获取区域坐标</title>
     <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
     <script src="https://webapi.amap.com/maps?v=1.4.4&key=你的key&plugin=AMap.PolyEditor"></script>
     <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
@@ -15,10 +15,9 @@
     </style>
 </head>
 <body>
-<input id="string" type="text" value="">
+<input id="string" type="text" value="" style="display:none">
 <div id="container"></div>
 <div class="button-group">
-    <p id="text"></p>
     <input type="button" class="button" value="清除区域数据" onClick="deleteEditPolygon();"/>
     <input type="button" class="button" value="复制区域坐标" onClick="closeEditPolygon();"/>
 </div>

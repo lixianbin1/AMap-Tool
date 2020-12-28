@@ -1,0 +1,343 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>高德规划折线区域</title>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="https://webapi.amap.com/maps?v=1.4.4&key=你的key&plugin=AMap.PolyEditor"></script>
+<!--     <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script> -->
+    <script src="https://lib.sinaapp.com/js/jquery/2.2.4/jquery-2.2.4.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <style type="text/css" media="screen">
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{ 
+color:#acd7ff; 
+}
+input:-moz-placeholder,textarea:-moz-placeholder{ 
+color:#acd7ff; 
+}
+input::-moz-placeholder,textarea::-moz-placeholder{ 
+color:#acd7ff; 
+} 
+input:-ms-input-placeholder,textarea:-ms-input-placeholder{ 
+color:#acd7ff; 
+}
+input:focus{outline: 0;}
+body{outline:0}
+ul.tabs.dir_tab {
+    width: 200px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    height: 30px;
+    margin: 0 auto;
+    white-space: nowrap;
+    padding:0;
+}
+
+ul.tabs.dir_tab li {
+    height: 30px;
+    width: 33.3333%;
+    line-height: 30px;
+    position: relative;
+    display: block;
+    float: left;
+    text-align: center;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
+ul.tabs.dir_tab li a.icon-car {
+    background: url(https://www.amap.com/assets/img/icon/icon_car.png) no-repeat 50%;
+    background-size: 19px 19px;
+}
+ul.tabs.dir_tab li a.icon-bus {
+    background: url(https://www.amap.com/assets/img/icon/icon_bus.png) no-repeat 50%;
+    background-size: 20px 19px;
+}
+ul.tabs.dir_tab li a.icon-walk {
+    background: url(https://www.amap.com/assets/img/icon/icon_walk.png) no-repeat 50%;
+    background-size: 12px 19px;
+}
+ul.tabs.dir_tab li a {
+    display: inline-block;
+    color: #fff;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    opacity: .5;
+}
+#planForm {
+    position: relative;
+    padding: 14px;
+    padding-bottom: 68px;
+    background: #3d93fd;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+#dirBox {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    z-index: 6300;
+    overflow: hidden;
+}
+.line-search-form p input {
+    width: 78%;
+    height: 34px;
+    line-height: 32px;
+    border: none;
+    background: transparent;
+    text-indent: 5px;
+    color: #acd7ff;
+    padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.line-search-form p.line_serch_ipt {
+    position: relative;
+    height: 34px;
+    line-height: 34px;
+    width: 270px;
+    font-size: 14px;
+    color: #e1f1ff;
+    background-color: #3587eb;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}
+.line-search-form p.active input {
+    color: #e1f1ff;
+}
+.line-search-form p label {
+    margin-left: 10px;
+}
+ul.tabs.dir_tab li a.current {
+    opacity: 1;
+}
+.line-search-submit {
+    position: absolute;
+    margin-top: 17px;
+    border-bottom: none;
+    width: 270px;
+}
+.line-search-submit .line-search-clear {
+    color: #fff;
+}
+.line-search-submit a {
+    font-size: 13px;
+    text-decoration: none;
+    opacity: 1;
+    line-height: 32px;
+}
+.line-search-submit .dir_submit {
+    display: inline-block;
+    float: right;
+    padding: 0 25px;
+    height: 32px;
+    line-height: 32px;
+    background-color: #559ffb;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.21);
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.21);
+    -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,.21);
+}
+.line-search-form {
+    margin: 0 30px;
+}
+.line_serch_ipt .del-item {
+    position: absolute;
+    height: 14px;
+    width: 14px;
+    background-image: url(https://www.amap.com/assets/img/icon/icon_deleipt.png);
+    background-size: 14px 14px;
+    background-repeat: no-repeat;
+    right: 12px;
+    top: 10px;
+    cursor: pointer;
+    display: none;
+}
+    </style>
+</head>
+<body>
+<input id="string" type="text" value="" style="display:none">
+<div id="container"></div>
+
+<section id="dirBox">
+    <div id="planForm" data-spm-anchor-id="0.0.0.i11.42e51c4elKEa7T"> 
+        <ul class="tabs dir_tab col3 z-depth-1 clearfix" id="trafficTab"> 
+            <li> <a id="carTab" class="palntype_tab icon-car icondirtip current" href="javascript:void(0)" data-type="car"></a> </li> 
+            <li> <a id="busTab" class="palntype_tab icon-bus icondirtip" href="javascript:void(0)" data-type="bus"></a> </li> 
+            <li> <a id="walkTab" class="palntype_tab icon-walk icondirtip" href="javascript:void(0)" data-type="walk"></a> </li> 
+        </ul> 
+        <i class="dir_close iconfont icon-close"></i>  
+        <div class="line-search"> 
+            <div class="line-search-left icon_exchange" id="dir_exchange"> 
+                <i class="iconfont icon-switchroute"></i>  
+            </div> 
+            <div class="line-search-form"> 
+                <p class="line_serch_ipt line-search-from active"> 
+                    <label>起 </label> 
+                    <input type="text" class="dir_ipt" id="dir_from_ipt" dirtype="from" placeholder="请输入起点" value="" autocomplete="off">  
+                    <span class="del-item" style="display: inline;"></span> 
+                </p> 
+                <div class="passList"></div> 
+<!--                 <p class="line_serch_ipt line-search-to active"> 
+                    <label>终 </label> 
+                    <input type="text" class="dir_ipt" id="dir_to_ipt" dirtype="to" placeholder="请输入终点" value="" autocomplete="off">  
+                    <span class="del-item" style="display: inline;"></span> 
+                </p>  -->
+                <p class="line-search-submit"> 
+                    <a href="javascript:void(0)" class="line-search-clear">清除路线</a> 
+                    <a href="javascript:void(0)" class="dir_submit">开车去</a> 
+                    <span class="fa-spin"></span> 
+                </p> 
+            </div> 
+            <a href="javascript:void(0)" class="line-search-right icon_add" id="via_add"></a> 
+        </div> 
+    </div>
+</section>
+<script>
+    var storage = window.localStorage;
+    var map = new AMap.Map("container", {
+        resizeEnable: true,
+        //center: [1,1],//地图中心点
+        zoom: 13 //地图显示的缩放级别
+    });
+    var beginNum = 0;
+    var clickListener ;
+    var beginPoints;//读取storage数据的存储容器
+    var beginMarks ;//存储最开始的两个覆盖物实例
+    var polygon
+    var polygonEditor;
+    var resPolygon = [];
+    var resNum = 0;
+    var editRegion = storage.getItem("FenceRegion"); //区域坐标
+    init();
+    function init(){
+        beginPoints = [];
+        beginMarks = [];
+        beginNum = 0;
+        polygonEditor = '';
+
+        if(editRegion){
+            beginPoints = JsonToArray(editRegion);
+            polygon = createPolygon(beginPoints); //创建多边形对象
+            polygonEditor = createEditor(polygon);    //创建多边形插件
+        }else{ 
+            clickListener = AMap.event.addListener(map, "click", mapOnClick); //注册点击事件在map上
+        }
+    }
+    
+    function mapOnClick(e) {
+        beginMarks.push(addMarker(e.lnglat)); //push点击的坐标
+        beginPoints.push(e.lnglat);
+        beginNum++;
+        if(beginNum == 3){ // 点击次数
+            AMap.event.removeListener(clickListener); //删除注册的点击事件
+            polygon = createPolygon(beginPoints); //创建多边形对象
+            polygonEditor = createEditor(polygon);    //创建多边形插件
+            clearMarks();
+        }
+    };
+
+    //创建多边形对象
+    function createPolygon(arr){
+        var polygon = new AMap.Polygon({ //构造多边形对象
+            map: map, //地图对象
+            path: arr, //多边形节点数组
+            strokeColor: "#0000ff", //线条颜色
+            strokeOpacity: 1, //线条透明度
+            strokeWeight: 1,  //线条粗细
+            fillColor: "#f5deb3", // 填充颜色
+            fillOpacity: 0.2 //填充透明度
+        });
+        return polygon;
+    }
+
+    function createEditor(polygon){
+        var polygonEditor = new AMap.PolyEditor(map, polygon); //多边形编辑插件: map为地图
+        polygonEditor.open(); //打开编辑功能
+        return polygonEditor;
+    }
+
+    //闭合多边形，且存储并展示数据
+    function closeEditPolygon(){
+        if(!polygonEditor){
+            console.log('未获取到地图');
+            return false;
+        }
+        //polygonEditor.close();//关闭编辑状态
+        var FenceRegion = [];
+        if(!beginPoints){
+            console.log('未获取到坐标');
+            return false;
+        }
+        beginPoints.forEach(function(item,index){
+            var lng = parseFloat(item['lng']);//经
+            var lat = parseFloat(item['lat']);//纬
+            FenceRegion.push([lng,lat]);
+        });
+        map.setFitView();
+        var newRegion = ObjectToJson(FenceRegion);
+        storage.setItem("FenceRegion",newRegion); //存储区域坐标
+        console.log(newRegion); //打印区域坐标
+        $('#string').val(newRegion).select()
+        document.execCommand("copy")
+    }
+
+    function clearMarks(){
+        map.remove(beginMarks);
+    }
+
+    function JsonToArray(json){
+        var arr = JSON.parse(json);
+        var res = [];
+        for (var i = 0; i < arr.length; i++) {
+            var line = [];
+            line.push(arr[i][0]);
+            line.push(arr[i][1]);
+            res.push(line);
+        };
+        return res;
+    }
+
+    // 实例化点标记
+    function addMarker(lnglat) {
+        var marker = new AMap.Marker({
+            icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+            position: lnglat
+        });
+        marker.setMap(map);
+        return marker;
+    }
+
+    //对象转字符串，用于存储数据
+    function ObjectToJson(arr){
+        if(!arr.length) return null;
+        var i = 0;
+        len = arr.length,
+        array = [];
+        for(;i<len;i++){
+            array.push([arr[i][0],arr[i][1]]);
+        }
+        return JSON.stringify(array);
+    }
+
+    //删除数据
+    function deleteEditPolygon(){
+        storage.removeItem("FenceRegion");
+        map.remove(beginMarks);
+        map.remove(polygon);
+        beginPoints=[] //点的坐标
+        beginNum=0
+        polygonEditor.close() //关闭编辑
+        clickListener = AMap.event.addListener(map, "click", mapOnClick); //注册点击事件在map上
+    }
+</script>
+</body>
+</html>
