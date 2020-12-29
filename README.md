@@ -6,4 +6,6 @@
 
 获取区域坐标：https://lixianbin1.github.io/AMap-Tool/src/PolyEditor/index.html
 
+点击获取坐标：https://lixianbin1.github.io/AMap-Tool/src/Marken/index.html
+
 设置路线规划（未完工）：https://lixianbin1.github.io/AMap-Tool/src/Servicer/index.html

@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>点击获取坐标</title>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    <script src="https://webapi.amap.com/maps?v=1.4.4&key=你的key&plugin=AMap.PolyEditor"></script>
+    <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<input id="string" type="text" value="" style="display: block;position: absolute;z-index: 999;">
+<div id="container"></div>
+<script>
+    var map = new AMap.Map("container", {
+        resizeEnable: true,
+        //center: [1,1],//地图中心点
+        zoom: 13 //地图显示的缩放级别
+    });
+    var beginNum = 0;
+    var beginMarks=[] ;//存储覆盖物实例
+    var clickListener=AMap.event.addListener(map, "click", mapOnClick); //注册点击事件在map上
+
+    function mapOnClick(e) { //点击事件
+        let text=e.lnglat.lng + ' , ' + e.lnglat.lat
+        console.log(text, '已复制')
+        map.remove(beginMarks);
+        $('#string').val(text).select()
+        document.execCommand("copy")
+        beginMarks.push(addMarker(e.lnglat)); //push点击的坐标
+    };
+
+    function addMarker(lnglat) { // 实例化点标记
+        var marker = new AMap.Marker({
+            icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+            position: lnglat
+        });
+        marker.setMap(map);
+        return marker;
+    }
+</script>
+</body>
+</html>
