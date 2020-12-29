@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@4/dist/echarts.min.js?_v_=1607268016278"></script>
+  <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <style>
+    html,body{padding:0;margin:0;}
+    #chargeBox{width:100vw;height:calc(100vh - 64px);background:#12084c}
+  </style>
+</head>
+<body>
+  <div class="chargeBox" id="chargeBox"></div>
+  <script>
+      const dis=[0,108,216,324,432,540,648,768] //需要显示的定位0.45 8
+
+      var dist=[0,108,216,324,432,540,648,675,720,768]
+
+      var time=[ //显示的坐标轴
+        {name: "10:14",value: "28 10:14"},
+        {name: "11:14",value: "28 11:14"},
+        {name: "12:14",value: "28 12:14"},
+        {name: "13:14",value: "28 13:14"},
+        {name: "14:14",value: "28 14:14"},
+        {name: "15:14",value: "28 15:14"},
+        {name: "16:14",value: "28 16:14"},
+        {name: "16:15",value: "28 16:15"},
+        {name: "16:16",value: "28 16:15"},
+        {name: "16:17",value: "28 16:16"}
+      ]
+      let option = {
+        textStyle: {fontFamily:'PingFang',},
+        legend: {
+          left: 'center',
+          textStyle:{
+            color:'#888cad',
+          },
+          icon:'rect',
+          data:['实际值','预测值','预测区间']
+        },
+        grid: {
+          top: '25%',
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        tooltip:{
+          trigger:'axis',
+          backgroundColor:'#2196f3', 
+          formatter:(obj)=>{
+            var ax = dist.indexOf(obj[0].axisValue);
+            let str=time[ax].name+'<br/>'
+            for(let i in obj){
+              if(obj[i].seriesName=="实际值"||obj[i].seriesName=="预测值"){
+                str+=obj[i].seriesName+'：'+obj[i].value[1]+'<br/>'
+              }
+            }
+            return str
+          }
+        },
+        xAxis: {
+          type: 'value',
+          interval:1,
+          scale:false,
+          boundaryGap :true,
+          axisLine: {
+            onZero: false,
+            lineStyle:{width:0},
+          },
+          axisTick:{show:false},
+          axisLabel: {
+            showMinLabel:true,
+            color:"#fff",
+            formatter: function(value) {
+              let i = dis.indexOf(value);
+              let k= dist.indexOf(value);
+                if(i>-1){
+                  return time[k].name
+                }else{
+                  return '{a|' + value + '}'
+                }
+            },
+            rich: {a: {color: 'transparent'}}
+          },
+          splitLine: {show: false},
+        },
+        yAxis: [{
+          type: 'value',
+          min: 0,
+          //max: 500,
+          axisLabel: {
+            color:"#fff",
+          },
+          splitLine: {
+            show: true,
+            lineStyle:{color:'#19395a'},
+          },
+        }],
+        series: [
+          {
+            name:'实际值',
+            type:'line',
+            smooth: true,
+            color: '#00a1e4',
+            lineStyle: {width:1},
+            markPoint:{
+              label:{
+                show:true,
+                color:"#fff",
+                align:'center',
+                borderRadius:3,
+                padding:[5,8,5,8],
+                backgroundColor:'#2196f3',
+                position: 'start',
+                formatter:(obj)=>{
+                  let data=obj.data;
+                  let str=data.name+": "+data.yAxis;
+                  return str
+                }
+              },
+              symbol:'circle',
+              symbolSize:5,
+              data:this.curent
+            },
+            markLine:{
+              symbol:'none',
+              data:this.curentx,
+              label:{show:false},
+              lineStyle:{color:'#00a1e4',width:1,type:'solid',}
+            },
+            symbol: 'none',
+            data:[[0, 400],[108, 405],[216, 400],[324, 350],[432, 250],[540, 320],[648, 365]]
+          },
+          {
+            name:'预测值',
+            type:'line',
+            smooth: true,
+            color: '#ed4949',
+            markPoint:{
+              label:{
+                show:true,
+                color:"#fff",
+                align:'center',
+                borderRadius:3,
+                padding:[5,8,5,8],
+                backgroundColor:'#ed4949',
+                formatter:(obj)=>{
+                  let data=obj.data;
+                  let str=data.name+": "+data.yAxis;
+                  return str
+                }
+              },
+              symbol:'circle',
+              symbolSize:5,
+              data:this.forecast//预测位置
+            },
+            markLine:{
+              symbol:'none',
+              data:this.forecastx,
+              label:{show:false},
+              lineStyle:{color:'#ed4949',width:1,type:'solid',}
+            },
+            symbol: 'none',
+            data:[[0, 270],[108, 320],[216, 300],[324, 270],[432, 250],[540, 340],[648, 340],[675,346]]
+          },
+          {
+            name:'预测值',
+            type:'line',
+            smooth: true,
+            lineStyle: {
+              color: '#ed4949',
+              type: 'dashed',
+              width:1,
+            },
+            symbol:'none',
+            data:[[675, 346],[720, 345],[768, 343]],
+          },
+          {
+            name:'预测区间',
+            type:'line',
+            symbol: 'none',
+            smooth: true,
+            areaStyle: {color: 'rgba(237,73,73,0.3)',},
+            color: 'rgba(237,73,73,0.3)',
+            data:[[0, 320],[108, 370],[216, 350],[324, 320],[432, 300],[540, 390],[648, 396],[675, 397],[720, 398],[768, 399]]
+          },
+          {
+            name:'填充区域',
+            type:'line',
+            symbol: 'none',
+            smooth: true,
+            areaStyle: {
+              color:'#12084c',    
+            },
+            color: 'rgba(255,0,0,0.2)',
+            data:[[0, 220],[108, 270],[216, 250],[324, 220],[432, 200],[540, 290],[648, 296],[675, 297],[720, 298],[768, 299]]
+          }, 
+        ],
+      };
+      let myChart = echarts.init(document.getElementById('chargeBox'));
+      if(myChart){myChart.setOption(option);}
+  </script>
+</body>
+</html>

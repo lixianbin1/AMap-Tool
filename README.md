@@ -12,4 +12,6 @@
 
 ## Echarts
 
-Echarts 设置中国地图：https://lixianbin1.github.io/AMap-Tool/src/Echarts/index.html
+设置中国地图：https://lixianbin1.github.io/AMap-Tool/src/Echarts/China.html
+
+不等距折线图：https://lixianbin1.github.io/AMap-Tool/src/Echarts/Unequal.html
