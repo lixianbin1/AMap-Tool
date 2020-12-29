@@ -9,3 +9,7 @@
 点击获取坐标：https://lixianbin1.github.io/AMap-Tool/src/Marken/index.html
 
 设置路线规划（未完工）：https://lixianbin1.github.io/AMap-Tool/src/Servicer/index.html
+
+## Echarts
+
+Echarts 设置中国地图：https://lixianbin1.github.io/AMap-Tool/src/Echarts/index.html

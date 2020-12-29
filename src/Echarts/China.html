@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@4/dist/echarts.min.js?_v_=1607268016278"></script>
+  <script type="text/javascript" src="./china.js"></script>
+  <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <style>
+    html,body{padding:0;margin:0;}
+    #mapBox{width:100vw;height:calc(100vh - 64px);background:#12084c}
+  </style>
+</head>
+<body>
+
+  <h4 style="text-align:center;">该中国地图隐藏了南海诸岛，非完整中国地图，完整地图请参考：<a href="https://www.amap.com/search?query=%E4%B8%AD%E5%9B%BD&city=440300&geoobj=114.017816%7C22.512108%7C114.078972%7C22.542198&zoom=15.02">中国地图</a>，该页面仅用于技术交流。</h4>
+  <div class="mapbox" id="mapBox"></div>
+  <script>
+      let option = {
+        visualMap: {
+          pieces: [{
+            gt: 100,
+            color: new echarts.graphic.LinearGradient(0,0,0,1,[
+              {offset: 0,color: '#ef614e'},
+              {offset: 1,color: '#f1965c'}
+            ]),
+          }, {
+            lte: 100,
+            gt: 0,
+            color:  new echarts.graphic.LinearGradient(0,0,0,1,[
+              {offset: 0,color:"#2898f2"},
+              {offset: 1,color: '#9bd8f4'}
+            ]),
+          }],
+          show:false
+        },
+        geo: {
+          map: "china",
+          zoom: 1.15,
+          regions: [{
+            name: "南海诸岛",
+            value: 0,
+            itemStyle: {
+              normal: {opacity: 0,},
+            },
+            label: {show:false},
+            emphasis:{label:{show:false}}
+          }],
+          label: {
+            show: true,
+            color: "#fff",
+          },
+          itemStyle: {
+            normal: {borderColor: "#2678d9"},
+            emphasis: {areaColor: "#f2d5ad",}
+          }
+        },
+        series: [{
+          name: "分省业务详情",
+          type: "map",
+          geoIndex: 0,
+          data:[{name:"台湾",value:0},{name:'香港',value:0},{name:'澳门',value:0},{name:"内蒙古",value:0},{name:"北京",value:0},{name:"天津",value:0},{name:"山东",value:0},{name:"河北",value:0},{name:"山西",value:0},{name:"安徽",value:0},{name:"上海",value:0},{name:"江苏",value:0},{name:"浙江",value:0},{name:"福建",value:0},{name:"海南",value:0},{name:"广东",value:0},{name:"广西",value:0},{name:"青海",value:0},{name:"湖北",value:0},{name:"湖南",value:0},{name:"江西",value:0},{name:"河南",value:0},{name:"西藏",value:0},{name:"四川",value:0},{name:"重庆",value:0},{name:"陕西",value:0},{name:"贵州",value:0},{name:"云南",value:0},{name:"甘肃",value:0},{name:"宁夏",value:0},{name:"新疆",value:0},{name:"吉林",value:0},{name:"辽宁",value:0},{name:"黑龙江",value:0}]
+        }]
+      };
+      let myChart = echarts.init(document.getElementById('mapBox'));
+      if(myChart){myChart.setOption(option);}
+  </script>
+</body>
+</html>
