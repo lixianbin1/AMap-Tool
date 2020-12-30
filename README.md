@@ -6,6 +6,8 @@
 
 点击获取坐标：https://lixianbin1.github.io/AMap-Tool/Marken/index.html
 
+查询城市编码和天气：https://lixianbin1.github.io/AMap-Tool/Weather/index.html
+
 设置路线规划（未完工）：https://lixianbin1.github.io/AMap-Tool/Servicer/index.html
 
 ## Echarts

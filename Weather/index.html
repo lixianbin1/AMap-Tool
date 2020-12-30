@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+  <title>查询城市编码和天气</title>
+  <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=<你的key>&plugin=AMap.Autocomplete"></script>
+  <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+  <style type="text/css" media="screen">
+input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{ 
+color:#acd7ff; 
+}
+input:-moz-placeholder,textarea:-moz-placeholder{ 
+color:#acd7ff; 
+}
+input::-moz-placeholder,textarea::-moz-placeholder{ 
+color:#acd7ff; 
+} 
+input:-ms-input-placeholder,textarea:-ms-input-placeholder{ 
+color:#acd7ff; 
+}
+input:focus{outline: 0;}
+body{outline:0}
+
+#planForm {
+  position: relative;
+  padding: 14px;
+  padding-bottom: 68px;
+  background: #3d93fd;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+#dirBox {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  z-index: 6300;
+}
+.line-search-form p input {
+  width: 78%;
+  height: 34px;
+  line-height: 32px;
+  border: none;
+  background: transparent;
+  text-indent: 5px;
+  color: #acd7ff;
+  padding: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.line-search-form p.line_serch_ipt {
+  position: relative;
+  height: 34px;
+  line-height: 34px;
+  width: 270px;
+  font-size: 14px;
+  color: #e1f1ff;
+  background-color: #3587eb;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+.line-search-form p.active input {
+  color: #e1f1ff;
+}
+.line-search-form p label {
+  margin-left: 10px;
+}
+ul.tabs.dir_tab li a.current {
+  opacity: 1;
+}
+.line-search-submit {
+  position: absolute;
+  margin-top: 17px;
+  border-bottom: none;
+  width: 270px;
+}
+.line-search-submit .line-search-clear {
+  color: #fff;
+}
+.line-search-submit a {
+  font-size: 13px;
+  text-decoration: none;
+  opacity: 1;
+  line-height: 32px;
+}
+.line-search-submit .dir_submit {
+  display: inline-block;
+  float: right;
+  padding: 0 25px;
+  height: 32px;
+  line-height: 32px;
+  background-color: #559ffb;
+  border: none;
+  border-radius: 2px;
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,.21);
+  -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.21);
+  -moz-box-shadow: 0 1px 1px 0 rgba(0,0,0,.21);
+}
+.line-search-form {
+  margin: 0 30px;
+}
+.line_serch_ipt .del-item {
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  background-image: url(https://www.amap.com/assets/img/icon/icon_deleipt.png);
+  background-size: 14px 14px;
+  background-repeat: no-repeat;
+  right: 12px;
+  top: 10px;
+  cursor: pointer;
+  display: none;
+}
+
+
+#tip-list p{margin:0;line-height:32px;background-color:#fff;font-size:13px;cursor:pointer;position:relative;padding-left:32px;background-repeat: no-repeat;background-size: 40px;}
+#tip-list p:hover{background-color:#efefef;}
+#tip-list .ico{width:32px;height:32px;position:absolute;top:0;left:0;}
+#tip-list strong{color: #0082e5}
+.bus {
+  background-image: url(https://www.amap.com/assets/img/sug_icons.png);
+  background-position: -4px -4px;
+}
+.subway {
+  background-image: url(https://www.amap.com/assets/img/sug_icons.png);
+  background-position: -3px -159px;
+}
+.poi {
+  background-image: url(https://www.amap.com/assets/img/sug_icons.png);
+  background-position: -2px -120px;
+}
+</style>
+</head>
+<body>
+<input id="string" type="text" value="" style="display:none">
+<div id="container"></div>
+<section id="dirBox">
+  <div id="planForm" data-spm-anchor-id="0.0.0.i11.42e51c4elKEa7T">
+    <h3 style="text-align:center;color:#fff">城市编码天气查询</h3>
+
+    <i class="dir_close iconfont icon-close"></i>  
+    <div class="line-search"> 
+      <div class="line-search-left icon_exchange" id="dir_exchange"> 
+        <i class="iconfont icon-switchroute"></i>  
+      </div> 
+      <div class="line-search-form"> 
+        <p class="line_serch_ipt line-search-from active"> 
+          <label>城 </label> 
+          <input type="text" class="dir_ipt" id="dir_from_ipt" dirtype="from" placeholder="请输入地点" value="" autocomplete="off">  
+          <span class="del-item" style="display: inline;"></span> 
+        </p> 
+        <div class="passList"></div> 
+
+      </div> 
+      <a href="javascript:void(0)" class="line-search-right icon_add" id="via_add"></a> 
+    </div> 
+  </div>
+</section>
+<script>
+  const key='a3f807fd7e8f5862d4a6551e29e9c7a7'
+  var map = new AMap.Map("container", {
+    resizeEnable: true,
+    //center: [114.077321 , 22.547476],//地图中心点
+    zoom: 13 //地图显示的缩放级别
+  });
+
+  $('.del-item').click(function(){
+    $("#dir_from_ipt").val('')
+    $('#tip-list').empty()
+  })
+
+  $("#dir_from_ipt").bind('input propertychange', function() {
+    var text = $("#dir_from_ipt").val();
+    const addcodes=new Promise(function(fulfill,reject){
+      $.ajax({
+        url:"https://restapi.amap.com/v3/geocode/geo?address="+text+"&output=JSON&key="+key,
+        async:false,
+        success: function(e){
+          if(e.status&&e.geocodes&&e.geocodes.length>0){
+            fulfill(e.geocodes[0].adcode)
+            map.panTo(e.geocodes[0].location.split(','));
+            $('#tip-list').length<1?$('#dirBox').append('<div id="tip-list"></div>'):$('#tip-list').empty()
+            var arr=e.geocodes
+            for(let i in arr){
+              var strong= arr[i].formatted_address+' 编码：'+arr[i].adcode
+              var a='<p class="poi">'+ strong +'</p>'
+              $('#tip-list').append(a)
+            }
+          }else{
+            reject(null)
+          }
+        }
+      })
+    })
+    addcodes.then(function(val){
+      getTipList(val)
+    },function(err){
+      console.log(err)
+    })
+  })
+  function getTipList(address){
+    $.ajax({
+      url:"https://restapi.amap.com/v3/weather/weatherInfo?city="+address+"&output=JSON&key="+key,
+      async:false,
+      success: function(e){
+        if(e.status){
+          var arr=e.lives
+          var dom=document.createElement('div')
+          for(let i in arr){
+            var a="<p>空气湿度："+arr[i].humidity+"</p>"
+            var b="<p>实时温度："+arr[i].temperature+"摄氏度</p>"
+            var c="<p>天气："+arr[i].weather+"</p>"
+            var d="<p>风向："+arr[i].winddirection+"</p>"
+            var e="<p>风力"+arr[i].windpower+"级</p>"
+            dom.innerHTML=a+b+c+d+e
+          }
+          $('#tip-list').append(dom)
+        }
+      }
+    })
+  }
+
+var isPrev=true,setTime
+var setTimeFun=(time)=>{
+  clearTimeout(setTime)
+  setTime=setTimeout(()=>{
+    isPrev=true
+  },time)
+}
+function prevent(fun,time){
+  if(isPrev){
+    isPrev=false
+    setTimeFun(time)
+    fun()
+  }else{
+    setTimeFun(time)
+  }
+}
+</script>
+</body>
+</html>
