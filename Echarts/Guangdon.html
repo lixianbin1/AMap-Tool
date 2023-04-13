@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@4/dist/echarts.min.js?_v_=1607268016278"></script>
+  <script type="text/javascript" src="./Guangdon.js"></script>
+  <script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <style>
+    html,body{padding:0;margin:0;}
+    #mapBox{width:100vw;height:100vh;background:#12084c}
+  </style>
+</head>
+<body>
+  <div class="mapbox" id="mapBox"></div>
+  <script>
+      let option = {
+        tooltip: {
+          trigger: 'item',
+          showDelay: 0,
+          transitionDuration: 0.2
+        },
+        visualMap: {
+          pieces: [{
+            gt: 100,
+            color: new echarts.graphic.LinearGradient(0,0,0,1,[
+              {offset: 0,color: '#ef614e'},
+              {offset: 1,color: '#f1965c'}
+            ]),
+          }, {
+            lte: 100,
+            gt: 0,
+            color:  new echarts.graphic.LinearGradient(0,0,0,1,[
+              {offset: 0,color:"#2898f2"},
+              {offset: 1,color: '#9bd8f4'}
+            ]),
+          }],
+          show:false
+        },
+        geo: {
+          map: "guangdong",
+          zoom: 1.15,
+          label: {
+            show: true,
+            color: "#fff",
+          },
+          itemStyle: {
+            normal: {borderColor: "#2678d9"},
+            emphasis: {areaColor: "#f2d5ad",}
+          },
+          tooltip: {
+            trigger: 'item',
+            showDelay: 0,
+            transitionDuration: 0.2
+          },
+        },
+        series: [{
+          name: "广东省业务详情",
+          type: "map",
+          geoIndex: 0,
+          data:[
+            {name:"汕头市",value:10},
+            {name:"佛山市",value:1000},
+          ],
+        }]
+      };
+      let myChart = echarts.init(document.getElementById('mapBox'));
+      if(myChart){myChart.setOption(option);}
+  </script>
+</body>
+</html>

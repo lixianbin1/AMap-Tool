@@ -14,4 +14,6 @@
 
 <a href="https://lixianbin1.github.io/AMap-Tool/Echarts/China.html" target="_blank">设置中国地图</a>
 
+<a href="https://lixianbin1.github.io/AMap-Tool/Echarts/Guangdon.html" target="_blank">设置广东市区地图</a>
+
 <a href="https://lixianbin1.github.io/AMap-Tool/Echarts/Unequal.html" target="_blank">不等距折线图</a>
