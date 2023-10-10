@@ -10,6 +10,8 @@
 
 <a href="https://lixianbin1.github.io/AMap-Tool/Servicer/index.html" target="_blank">设置路线规划（未完工）</a>
 
+被高德打电话过来警告了，说调用量太多了，我也挺奇怪的，这个项目也没人看呀，估计是爬虫爬的。先停了高德的key
+
 ## Echarts
 
 <a href="https://lixianbin1.github.io/AMap-Tool/Echarts/China.html" target="_blank">设置中国地图</a>
